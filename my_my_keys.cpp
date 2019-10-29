@@ -1,34 +1,55 @@
 #include <stdio.h> // for function sprintf
 char message[100];
-char pins_rows[8] = {2,3,4,5,6,7,8,9,10};
+char pins_rows[9] = {2,3,4,5,6,7,8,9,10};
 //контакты тут
+//add ground contacts
+char ground_colums[6] = {11,12,13,A0,A1,A2};
 
 
-void init_key(){
+
+void init_rows(){
     for(int i = 0; i <9; i++){
         pinMode(pins_rows[i],INPUT_PULLUP);
         digitalWrite(pins_rows[i],HIGH);
     }
-    Serial.begin(9600);
-    Serial.print("keyboard inited");
+    Serial.print("row inited");
 }
+void init_columns(){
+    for(int i = 0; i <6; i++){
+        pinMode(ground_colums[i],OUTPUT);
+        digitalWrite(ground_colums[i],LOW);
+    }
+    Serial.print("column inited");
+}
+
+
+
+//TODO check this for on errors
 
 void it_pressed_key(){
-    for(int i = 0; i <5; i++){
-    if (digitalRead(pins_rows[i]) == LOW){
-    sprintf(message,"button %d is pressed",i);
+    //ошибка была в малом количестве)
+    //
+    for(int i = 0; i <9; i++){
+    for(int y = 0;y< 6;y++){
+    if (digitalRead(pins_rows [i]) == LOW){
+    sprintf(message,"row %d is pressed",i);
     Serial.print(message);
     Serial.print("\n");
-    
-
-
+    }
+    elseif (digitalRead(ground_colums[y] == HIGH){
+      sprintf(message,"column %d is pressed",y);
+      Serial.print(message);
     }
 }
-
 }
 
+
+
 void setup(){
-init_key();
+Serial.begin(9600);
+init_rows();
+init_columns();
+
 }
 void loop(){
 it_pressed_key();    
